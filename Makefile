@@ -21,7 +21,7 @@ all: build
 
 .PHONY: build
 build:
-	$(COMMONENVVAR) $(BUILDENVVAR) go build -o bin/load-watcher main.go
+	GOOS=linux GOARCH=amd64 $(BUILDENVVAR) go build -o bin/load-watcher main.go
 
 .PHONY: clean
 clean:

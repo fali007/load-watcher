@@ -17,14 +17,7 @@ spec:
     spec:
       containers:
       - name: load-watcher
-        image: [load-watcher image]
-        env:
-        - name: METRICS_PROVIDER_NAME
-          value: [Prometheus/SignalFx]
-        - name: METRICS_PROVIDER_ADDRESS
-          value: [metrics_provider_endpoint]
-        - name: METRICS_PROVIDER_TOKEN
-          value: [token]
+        image: docker.io/felixgeorge/test:loadwatcher
         ports:
         - containerPort: 2020
 ---
@@ -44,3 +37,29 @@ spec:
     protocol: TCP
   selector:
     app: load-watcher
+
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: secret-reader-binding
+subjects:
+  - kind: ServiceAccount
+    name: default
+    namespace: loadwatcher
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: node-readeir
+
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: node-readeir
+rules:
+- apiGroups: ["*"]
+  resources: ["nodes"]
+  verbs: ["*"]
+
